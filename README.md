@@ -1,67 +1,110 @@
-# Trabalho-LIA
+# Clap LED Sequencer
 
-trabalho-2024-LIA-Prof.https://github.com/Epaminondaslage
+Este projeto controla uma sequência de LEDs acesos por palmas.  
+Funcionalidades:
+- 1 palma: acende o LED 1  
+- 2 palmas: acende o LED 2  
+- 3 palmas: acende o LED 3  
+- 4 palmas: acende o LED 4  
+- 5 palmas: todos os LEDs piscam 3 vezes  
 
-Lâmpada Controlada por Palmas usando Arduino
-Este projeto permite que você controle uma lâmpada com o som de uma palma, utilizando um Arduino Uno, Módulo Relé e um Sensor de Som Digital. A lâmpada alterna entre ligada e desligada a cada palma.
+## Materiais
+- Arduino Uno
 
-# Componentes Utilizados
-.Arduino Uno
+- 4 LEDs
 
-.Módulo Relé
+- 4 resistores de 220 ohms
 
-.Fonte de Alimentação 5V SMPS
+- Sensor de som digital (KY-038)
 
-.Sensor de Som Digital
+![image](https://github.com/user-attachments/assets/3e8872e1-dc04-4727-bd0c-6295504bf7a9)
 
-.Lâmpada
+(Pinagem do Sensor de Som)
 
-.Fios Jumper
+- Fios e protoboard
 
-.Protoboard
-# Diagrama de Circuito
+## Como Usar
+1. Carregue o código `clap_led_sequencer.ino` no Arduino usando o Arduino IDE.  
+2. Monte o circuito conforme o esquema `wiring_diagram.png`.  
+3. Experimente acender LEDs com palmas!
 
-![Opera Instantâneo_2024-08-30_094430_projecthub arduino cc](https://github.com/user-attachments/assets/41767499-f346-4089-bf78-fd8601d87e65)
+## Conexões
+| Componente | Pino do Arduino |
+|------------|-----------------|
+| LED1       | D3              |
+| LED2       | D4              |
+| LED3       | D5              |
+| LED4       | D6              |
+| Sensor OUT | D2              |
+| Sensor VCC | 5V              |
+| Sensor GND | GND             |
 
+## Montagem
+1. Conecte os LEDs ao protoboard e ligue os cátodos ao GND com resistores de 220 ohms.
+2. Os anódos dos LEDs devem ser conectados aos pinos digitais do Arduino (D3 a D6).
+3. Conecte o sensor de som:  
+   - OUT no pino D2 do Arduino.  
+   - VCC ao pino 5V e GND ao GND.
+4. Verifique as conexões antes de alimentar o Arduino.
 
-# Conexões
+## Programa
 
-Sensor de Som Digital:
+#define SOUND_SENSOR_PIN 2
+const int LED_PINS[4] = {3, 4, 5, 6};
+int clapCount = 0;
+unsigned long lastClapTime = 0;
+const int clapDelay = 300;  // Tempo para ignorar ruídos
 
-.VCC: Conecte ao pino de 5V do Arduino.
+void setup() {
+  for (int i = 0; i < 4; i++) {
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
+  }
+  pinMode(SOUND_SENSOR_PIN, INPUT);
+  Serial.begin(9600);
+}
 
-.GND: Conecte ao GND do Arduino.
+void loop() {
+  int soundValue = digitalRead(SOUND_SENSOR_PIN);
 
-.OUT: Conecte ao pino digital 7 do Arduino.
+  if (soundValue == HIGH) {
+    unsigned long currentTime = millis();
 
-Módulo Relé:
+    // Verifica o tempo entre claps para ignorar ruídos
+    if (currentTime - lastClapTime > clapDelay) {
+      clapCount++;
+      if (clapCount > 5) clapCount = 1; // Reinicia após a quinta palma
 
-.VCC: Conecte ao pino de 5V do Arduino.
+      updateLeds();
+      Serial.print("Clap Count: ");
+      Serial.println(clapCount);
+      delay(500); // Ignora múltiplos sinais de uma só palma
+    }
 
-.GND: Conecte ao GND do Arduino.
+    lastClapTime = currentTime;
+  }
+}
 
-.IN: Conecte ao pino digital 8 do Arduino.
+void updateLeds() {
+  if (clapCount < 5) {
+    // Acende LEDs de forma sequencial
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(LED_PINS[i], i < clapCount ? HIGH : LOW);
+    }
+  } else {
+    // Na quinta palma, pisca todos os LEDs
+    for (int i = 0; i < 3; i++) {  // Pisca três vezes
+      setAllLeds(HIGH);
+      delay(200);
+      setAllLeds(LOW);
+      delay(200);
+    }
+  }
+}
 
-.COM: Conecte ao fio de fase da lâmpada.
-
-.NO (Normalmente Aberto): Conecte à lâmpada.
-Lâmpada:
-
-Conecte um fio ao pino COM do módulo relé e o outro à fase da rede elétrica.
-O fio neutro da rede elétrica vai direto para a lâmpada.
-
-![Opera Instantâneo_2024-08-30_094805_www youtube com](https://github.com/user-attachments/assets/d9a1d80e-e375-4e18-a544-6bca2b0d4015)
-
-# Como Funciona
-
-O sensor de som digital detecta o som de uma palma.
-O Arduino lê a saída do sensor. Se um som for detectado, o Arduino alterna o estado do relé.
-O relé controla a energia da lâmpada, ligando ou desligando com base no estado do relé.
-
-# Precauções de Segurança
-
-Certifique-se de utilizar isolamento adequado ao trabalhar com o relé e a lâmpada, pois você estará lidando com tensão da rede elétrica.
-Verifique as conexões antes de ligar a alimentação para evitar curtos-circuitos ou riscos elétricos.
-
-# Referência
-https://projecthub.arduino.cc/utsabkayal001/clap-switch-using-arduino-281d0d
+void setAllLeds(bool state) {
+  for (int i = 0; i < 4; i++) {
+    digitalWrite(LED_PINS[i], state);
+  }
+}
+''
