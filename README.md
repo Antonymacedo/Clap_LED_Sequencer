@@ -47,103 +47,77 @@ Funcionalidades:
    - VCC ao pino 5V e GND ao GND.
 4. Verifique as conexões antes de alimentar o Arduino.
 
-## Programa
+## Código
 
+```
 #define SOUND_SENSOR_PIN 2
-
 const int LED_PINS[4] = {3, 4, 5, 6};
-
 int clapCount = 0;
-
 unsigned long lastClapTime = 0;
-
 const int clapDelay = 300;  // Tempo para ignorar ruídos
 
 void setup() {
-
   for (int i = 0; i < 4; i++) {
- 
-pinMode(LED_PINS[i], OUTPUT);
- 
- digitalWrite(LED_PINS[i], LOW);
-  
+    pinMode(LED_PINS[i], OUTPUT);
+    digitalWrite(LED_PINS[i], LOW);
   }
- 
   pinMode(SOUND_SENSOR_PIN, INPUT);
- 
   Serial.begin(9600);
-
 }
 
 void loop() {
-  
   int soundValue = digitalRead(SOUND_SENSOR_PIN);
 
   if (soundValue == HIGH) {
-   
-   unsigned long currentTime = millis();
+    unsigned long currentTime = millis();
 
-// Verifica o tempo entre claps para ignorar ruídos
-  
-  if (currentTime - lastClapTime > clapDelay) {
-  
-  clapCount++;
- 
-  if (clapCount > 5) clapCount = 1; // Reinicia após a quinta palma
+    // Verifica o tempo entre claps para ignorar ruídos
+    if (currentTime - lastClapTime > clapDelay) {
+      clapCount++;
+      if (clapCount > 5) clapCount = 1; // Reinicia após a quinta palma
 
-updateLeds();
-      
-   Serial.print("Clap Count: ");
-    
-   Serial.println(clapCount);
-   
-   delay(500); // Ignora múltiplos sinais de uma só palma
-   
-   }
+      updateLeds();
+      Serial.print("Clap Count: ");
+      Serial.println(clapCount);
+      delay(500); // Ignora múltiplos sinais de uma só palma
+    }
 
-lastClapTime = currentTime;
- 
+    lastClapTime = currentTime;
   }
 }
 
 void updateLeds() {
-
   if (clapCount < 5) {
-
-   // Acende LEDs de forma sequencial
- 
-   for (int i = 0; i < 4; i++) {
- 
-   digitalWrite(LED_PINS[i], i < clapCount ? HIGH : LOW);
-
- }
-
+    // Acende LEDs de forma sequencial
+    for (int i = 0; i < 4; i++) {
+      digitalWrite(LED_PINS[i], i < clapCount ? HIGH : LOW);
+    }
   } else {
-
-   // Na quinta palma, pisca todos os LEDs
-
- for (int i = 0; i < 3; i++) {  // Pisca três vezes
-      
-   setAllLeds(HIGH);
-   
-   delay(200);
-    
-   setAllLeds(LOW);
-    
-   delay(200);
-   
-   }
+    // Na quinta palma, pisca todos os LEDs
+    for (int i = 0; i < 3; i++) {  // Pisca três vezes
+      setAllLeds(HIGH);
+      delay(200);
+      setAllLeds(LOW);
+      delay(200);
+    }
   }
 }
-
 
 void setAllLeds(bool state) {
- 
   for (int i = 0; i < 4; i++) {
-  
-   digitalWrite(LED_PINS[i], state);
- 
+    digitalWrite(LED_PINS[i], state);
   }
-
 }
+```
 
+## Resultado
+
+![90872eda-3357-4bd7-a766-d153e9d73cda](https://github.com/user-attachments/assets/976ff309-b5bb-4fd1-a78a-a7ccdc15ec66)
+
+Foto do resultado final
+
+
+
+https://github.com/user-attachments/assets/ab7af1bd-b32c-471d-9ab0-2a387c27bdd4
+
+Vidéo do resultado final
