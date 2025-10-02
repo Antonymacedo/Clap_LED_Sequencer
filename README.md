@@ -1,4 +1,4 @@
-# Clap LED Sequencer
+# Clap LED Sequencer👋
 
 Este projeto controla uma sequência de LEDs acesos por palmas.  
 Funcionalidades:
@@ -8,7 +8,7 @@ Funcionalidades:
 - 4 palmas: acende o LED 4  
 - 5 palmas: todos os LEDs piscam 3 vezes  
 
-## Materiais
+## Materiais⚙️
 - Arduino Uno
 
 - 4 LEDs
@@ -23,7 +23,7 @@ Funcionalidades:
 
 - Fios e protoboard
 
-## Como Usar
+## Como Usar🤖
 1. Carregue o código `clap_led_sequencer.ino` no Arduino usando o Arduino IDE.  
 2. Monte o circuito conforme o esquema `wiring_diagram.png`.  
 3. Experimente acender LEDs com palmas!
@@ -39,7 +39,7 @@ Funcionalidades:
 | Sensor VCC | 5V              |
 | Sensor GND | GND             |
 
-## Montagem
+## Montagem🛠️
 1. Conecte os LEDs ao protoboard e ligue os cátodos ao GND com resistores de 220 ohms.
 2. Os anódos dos LEDs devem ser conectados aos pinos digitais do Arduino (D3 a D6).
 3. Conecte o sensor de som:  
@@ -47,7 +47,7 @@ Funcionalidades:
    - VCC ao pino 5V e GND ao GND.
 4. Verifique as conexões antes de alimentar o Arduino.
 
-## Código
+## Código💻
 
 ```
 #define SOUND_SENSOR_PIN 2
@@ -110,7 +110,7 @@ void setAllLeds(bool state) {
 }
 ```
 
-## Resultado
+## Resultado❗
 
 ![90872eda-3357-4bd7-a766-d153e9d73cda](https://github.com/user-attachments/assets/976ff309-b5bb-4fd1-a78a-a7ccdc15ec66)
 
