@@ -1,12 +1,21 @@
 # Clap LED Sequencer👋
+![Arduino](https://img.shields.io/badge/Arduino-UNO-00979D?style=flat-square&logo=arduino&logoColor=white)
+![Language](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=c%2B%2B&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
+ 
 Este projeto controla uma sequência de LEDs acesos por palmas.  
 Funcionalidades:
-- 1 palma: acende o LED 1  
-- 2 palmas: acende o LED 2  
-- 3 palmas: acende o LED 3  
-- 4 palmas: acende o LED 4  
-- 5 palmas: todos os LEDs piscam 3 vezes  
+
+| Ação| LED |
+|---|---|
+| 1 palma:  | 🟡 Amarelo|
+| 2 palmas: | 🔵 Azul |
+| 3 palmas: | 🟢 Verde  |
+| 4 palmas: | 🔴 Vermelho |
+| 5 palmas: | todos os LEDs piscam 3 vezes |
+
+
 
 ## Materiais⚙️
 - Arduino Uno
